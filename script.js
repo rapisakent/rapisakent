@@ -78,7 +78,7 @@ const graphicDesignProjects = [
   id: 53, 
   title: "SC Performance Mentality Email Signature", 
   category: "Brand Identity Design", 
-  image: "./images/lack and White Scribbles Freelance Email Signature (800 x 250 px).png", 
+  image: "./images/Black and White Scribbles Freelance Email Signature (800 x 250 px).png", 
   description: "A professional branded email signature created for SC Performance Mentality, combining personal branding, certification credentials, contact information, and a refined performance-focused visual identity.", 
   year: "2026" 
 },
