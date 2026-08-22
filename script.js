@@ -73,14 +73,14 @@ const videoProjects = [
     id: 1,
     title: "AI-Short Vid",
     category: "YouTube Automation",
-    video: "https://youtube.com/shorts/QUFDzY51VXM?si=UdaEQUhjw5q9ay5L",
+    video: "https://youtube.com/shorts/QUFDzY51VXM?si=n13ofiMfLBcvBvTs",
     description: "AI-generated short-form video created for YouTube automation."
   },
   {
     id: 2,
     title: "AI-Short Vid",
     category: "YouTube Automation",
-    video: "https://youtube.com/shorts/3RCmbkwHxck?si=10-O4cEWajsBoOUT",
+    video: "https://youtube.com/shorts/3RCmbkwHxck?si=P3E0wt4PcwrnouHl",
     description: "Vertical AI-generated short video created for social distribution."
   },
   {
@@ -94,7 +94,7 @@ const videoProjects = [
     id: 4,
     title: "Lyric Animation",
     category: "YouTube Automation",
-    video: "https://youtube.com/shorts/Z2YIWbDswc8?si=BLMXv4fbszH9q2TO",
+    video: "https://youtube.com/shorts/Z2YIWbDswc8?si=nG5YU5KG6BDT6CxT",
     description: "AI-animated music video synchronized with song lyrics and visual storytelling."
   },
   {
