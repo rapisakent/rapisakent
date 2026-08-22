@@ -59,41 +59,49 @@ const graphicDesignProjects = [
 
 ];
 
+/* Each entry's "video" field can be either:
+   - a local file path (e.g. "./videos/1.mp4"), or
+   - a YouTube link (any of these formats all work):
+       https://www.youtube.com/watch?v=VIDEO_ID
+       https://youtu.be/VIDEO_ID
+       https://www.youtube.com/shorts/VIDEO_ID
+       https://www.youtube.com/embed/VIDEO_ID
+   Paste your own YouTube link over the "PASTE-YOUTUBE-LINK-HERE" placeholders below —
+   title, category, and description stay exactly as you wrote them. */
 const videoProjects = [
   {
     id: 1,
     title: "AI-Short Vid",
     category: "YouTube Automation",
-    video: "./videos/1-minute_OpenArt.mp4",
+    video: "https://youtube.com/shorts/QUFDzY51VXM?si=UdaEQUhjw5q9ay5L",
     description: "AI-generated short-form video created for YouTube automation."
   },
   {
     id: 2,
     title: "AI-Short Vid",
     category: "YouTube Automation",
-    video: "./videos/Pixar-Style_Cats.mp4",
+    video: "https://youtube.com/shorts/3RCmbkwHxck?si=10-O4cEWajsBoOUT",
     description: "Vertical AI-generated short video created for social distribution."
   },
   {
     id: 3,
     title: "Ads Short Vid",
     category: "Advertising",
-    video: "./videos/TEST_AD-2.mp4",
+    video: "https://youtu.be/OCoMrWa4PMA?si=9RwsQQiuTFWUvjUe",
     description: "Short-form advertising video created for promotional campaigns."
   },
   {
     id: 4,
     title: "Lyric Animation",
     category: "YouTube Automation",
-    video: "Pixar-Animated_Style.mp4",
+    video: "https://youtube.com/shorts/Z2YIWbDswc8?si=BLMXv4fbszH9q2TO",
     description: "AI-animated music video synchronized with song lyrics and visual storytelling."
-    
   },
   {
     id: 5,
     title: "Ads Short Vid",
     category: "Advertising",
-    video: "./videos/TEST_AD-1.mp4",
+    video: "https://youtube.com/shorts/IQtlvajl2es",
     description: "Short-form advertising video created for promotional campaigns."
   },
 ];
@@ -129,11 +137,27 @@ const videoProjects = [
   videoProjects.forEach((v, i) => {
     if (imgFallback[v.poster]) v.poster = imgFallback[v.poster];
     if (/^YOUR-VIDEO-LINK-/.test(v.video)) v.video = sampleVideos[i % sampleVideos.length];
+    if (v.video === "PASTE-YOUTUBE-LINK-HERE") v.video = sampleVideos[i % sampleVideos.length];
   });
 })();
 
 /* ===== END EDITABLE CONTENT ===== */
 
+/* ---------- YouTube link detection ---------- */
+function getYouTubeId(url){
+  if (!url || typeof url !== "string") return null;
+  const patterns = [
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+  ];
+  for (const p of patterns){
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -252,9 +276,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---------- render video grid ---------- */
   const videoGrid = document.getElementById("videoGrid");
-  videoGrid.innerHTML = videoProjects.map((v, i) => `
+  videoGrid.innerHTML = videoProjects.map((v, i) => {
+    const ytId = getYouTubeId(v.video);
+    const preview = ytId
+      ? `<img class="v-card-thumb" src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" alt="${escapeHtml(v.title)}" loading="lazy">`
+      : `<video src="${v.video}#t=0.5" poster="${v.poster || ''}" muted preload="metadata" playsinline></video>`;
+    return `
     <div class="v-card" data-index="${i}" tabindex="0" role="button" aria-label="Play ${escapeHtml(v.title)}">
-      <video src="${v.video}#t=0.5" poster="${v.poster || ''}" muted preload="metadata" playsinline></video>
+      ${preview}
       <span class="v-card-play" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg>
       </span>
@@ -265,7 +294,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <span class="v-card-desc">${escapeHtml(v.description)}</span>
       </div>
     </div>
-  `).join("");
+  `;
+  }).join("");
 
   const vCards = Array.from(videoGrid.querySelectorAll(".v-card"));
   vCards.forEach(card => {
@@ -273,14 +303,16 @@ document.addEventListener("DOMContentLoaded", () => {
     card.addEventListener("keydown", e => { if (e.key === "Enter") openVideoModal(Number(card.dataset.index)); });
     // Flag cards whose source file can't actually be loaded (wrong path,
     // missing file, or unsupported format) so it's visible in the grid
-    // instead of silently doing nothing when clicked.
+    // instead of silently doing nothing when clicked. Only applies to
+    // local <video> previews — YouTube thumbnails don't need this.
     const previewVideo = card.querySelector("video");
-    previewVideo.addEventListener("error", () => card.classList.add("has-error"));
+    if (previewVideo) previewVideo.addEventListener("error", () => card.classList.add("has-error"));
   });
 
   /* ---------- video modal ---------- */
   const videoModal = document.getElementById("videoModal");
   const modalVideo = document.getElementById("modalVideo");
+  const modalYoutube = document.getElementById("modalYoutube");
   const videoModalTitle = document.getElementById("videoModalTitle");
   const videoModalMeta = document.getElementById("videoModalMeta");
   const videoModalError = document.getElementById("videoModalError");
@@ -288,20 +320,36 @@ document.addEventListener("DOMContentLoaded", () => {
   function openVideoModal(index){
     const v = videoProjects[index];
     videoModalError.textContent = "";
-    modalVideo.onerror = () => {
-      videoModalError.textContent =
-        "This video couldn't be played — check that the file exists at \"" + v.video + "\" and is a standard MP4 (H.264).";
-    };
-    modalVideo.src = v.video;
-    modalVideo.poster = v.poster || "";
+    const ytId = getYouTubeId(v.video);
+
+    if (ytId){
+      // YouTube embed: hide the local <video>, show the iframe player.
+      modalVideo.pause();
+      modalVideo.removeAttribute("src");
+      modalVideo.style.display = "none";
+      modalYoutube.style.display = "block";
+      modalYoutube.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+    } else {
+      // Local file: hide the iframe, show the <video>.
+      modalYoutube.style.display = "none";
+      modalYoutube.src = "";
+      modalVideo.style.display = "block";
+      modalVideo.onerror = () => {
+        videoModalError.textContent =
+          "This video couldn't be played — check that the file exists at \"" + v.video + "\" and is a standard MP4 (H.264).";
+      };
+      modalVideo.src = v.video;
+      modalVideo.poster = v.poster || "";
+      modalVideo.play().catch(() => {
+        videoModalError.textContent =
+          "This video couldn't be played — check that the file exists at \"" + v.video + "\" and is a standard MP4 (H.264).";
+      });
+    }
+
     videoModalTitle.textContent = v.title;
     videoModalMeta.textContent = v.category;
     videoModal.classList.add("is-open");
     document.body.style.overflow = "hidden";
-    modalVideo.play().catch(() => {
-      videoModalError.textContent =
-        "This video couldn't be played — check that the file exists at \"" + v.video + "\" and is a standard MP4 (H.264).";
-    });
   }
   function closeVideoModal(){
     videoModal.classList.remove("is-open");
@@ -311,6 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modalVideo.removeAttribute("src");
     modalVideo.onerror = null;
     modalVideo.load();
+    modalYoutube.src = ""; // stop YouTube playback
     videoModalError.textContent = "";
   }
   document.getElementById("videoModalClose").addEventListener("click", closeVideoModal);
@@ -485,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ---------- contact form -> opens the visitor's email client, prefilled ---------- */
   const contactForm = document.getElementById("contactForm");
   const formNote = document.getElementById("formNote");
-  const STUDIO_EMAIL = "hello@kentstudio.co";
+  const STUDIO_EMAIL = "rapisakentva@gmail.com";
 
   contactForm.addEventListener("submit", e => {
     e.preventDefault();
