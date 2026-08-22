@@ -83,6 +83,15 @@ const graphicDesignProjects = [
   year: "2026" 
 },
 
+  {
+  id: 54, 
+  title: "Facetlaban University Event Poster", 
+  category: "Poster Design", 
+  image: "./images/630971301_1340556718106698_2672198422723671248_n.jpg", 
+  description: "A fantasy-themed promotional poster for Faegethaban, featuring illustrated woodland characters, an immersive story-driven visual style, decorative typography, and a warm hand-drawn adventure aesthetic.", 
+  year: "2026" 
+},
+
 
 
  { id: 33, title: "Skincare E-Commerce Website Design", category: "Website Design", image: "./images/32.jpg", description: "E-commerce website designed to showcase skincare products and drive online sales.", year: "2026" },
@@ -91,7 +100,6 @@ const graphicDesignProjects = [
  { id: 35, title: "Yoga Wellness Website", category: "Website Design", image: "./images/35.jpg", description: "Wellness website designed to showcase yoga classes, benefits, and membership programs.", year: "2026" },
  { id: 36, title: "Construction Company Website", category: "Website Design", image: "./images/36.jpg", description: "Corporate website designed to showcase construction services, projects, team, and pricing.", year: "2024" },
 { id: 37, title: "Private Jet Charter Website", category: "Website Design", image: "./images/37.jpg", description: "Luxury website designed to showcase private jet travel, destinations, and charter booking services.", year: "2025" },
-
 ];
 
 /* Each entry's "video" field can be either:
