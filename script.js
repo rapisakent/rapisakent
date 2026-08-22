@@ -47,6 +47,41 @@ const graphicDesignProjects = [
 { id: 47, title: "Call of Duty Tournament Poster", category: "Graphic Design", image: "./images/39.jpg", description: "Event poster designed to promote a Call of Duty gaming tournament and attract participants.", year: "2026" },
  { id: 48, title: "Programming Symbols Educational Carousel", category: "Social Media Design", image: "./images/40.png", description: "Educational carousel designed to explain essential programming symbols and their uses.", year: "2026" },
 { id: 49, title: "Programming Symbols Educational Carousel", category: "Social Media Design", image: "./images/41.png", description: "Educational carousel designed to teach programming symbols and their functions.", year: "2026" },
+  { 
+  id: 50, 
+  title: "Reset Toolkit for Athletes & Parents", 
+  category: "Digital Workbook Design", 
+  image: "./images/Screenshot 2026-08-03 142536.png", 
+  description: "A structured mental performance toolkit designed for athletes and parents, featuring reset routines, reflection exercises, recovery scorecards, and practical performance strategies.", 
+  year: "2026" 
+},
+
+{ 
+  id: 51, 
+  title: "Focus & Attention Toolkit", 
+  category: "Digital Workbook Design", 
+  image: "./images/Screenshot 2026-08-03 142422.png", 
+  description: "A guided focus and attention workbook created for athletes, featuring practical exercises for identifying distractions, building focus anchors, resetting attention, and reflecting after competition.", 
+  year: "2026" 
+},
+
+{ 
+  id: 52, 
+  title: "Confidence & Comparison Toolkit", 
+  category: "Digital Workbook Design", 
+  image: "./images/Screenshot 2026-08-03 142314.png", 
+  description: "A mental performance workbook designed to help athletes develop confidence, manage comparison, respond to doubt, and build stronger confidence habits through guided activities and reflection.", 
+  year: "2026" 
+},
+
+{ 
+  id: 53, 
+  title: "SC Performance Mentality Email Signature", 
+  category: "Brand Identity Design", 
+  image: "./images/lack and White Scribbles Freelance Email Signature (800 x 250 px).png", 
+  description: "A professional branded email signature created for SC Performance Mentality, combining personal branding, certification credentials, contact information, and a refined performance-focused visual identity.", 
+  year: "2026" 
+},
 
 
 
